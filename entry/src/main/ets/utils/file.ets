@@ -7,28 +7,33 @@ import { BusinessError } from '@kit.BasicServicesKit';
 // 获取应用文件路径
 let context = getContext(this) as common.UIAbilityContext;
 let filesDir = context.filesDir;
+export function formatFilePath(fileName:string):string{
+  return `${filesDir}/${fileName}.json`
+}
 
 export function createFile(fileName: string): Promise<string> {
   return new Promise<string>((resolve, reject) => {
-    fs.access(filesDir + fileName).then((res: boolean) => {
+    fs.access(formatFilePath(fileName)).then((res: boolean) => {
       if (res) {
+        console.info(formatFilePath(fileName)+':存在文件存在，创建失败')
         reject('文件存在，创建失败')
       } else {
-        let file = fs.openSync(filesDir + fileName, fs.OpenMode.CREATE)
+        let file = fs.openSync(formatFilePath(fileName), fs.OpenMode.CREATE)
         fs.closeSync(file.fd)
-        resolve(`${fileName}创建成功`)
+        console.info(formatFilePath(fileName)+':创建成功')
+        resolve(`${formatFilePath(fileName)}:创建成功`)
       }
     })
   })
-
 }
+
 
 export function readFile(fileName: string): Promise<bookItem[]> {
   return new Promise<bookItem[]>((resolve, reject) => {
-    fs.access(filesDir + fileName).then((res: boolean) => {
+    fs.access(formatFilePath(fileName)).then((res: boolean) => {
       if (res) {
-        let file = fs.openSync(filesDir + fileName, fs.OpenMode.READ_ONLY)
-        let stas = fs.statSync(filesDir + fileName)
+        let file = fs.openSync(formatFilePath(fileName), fs.OpenMode.READ_ONLY)
+        let stas = fs.statSync(formatFilePath(fileName))
         let readOptions: ReadOptions = {
           offset: 0,
           length: stas.size
@@ -36,42 +41,65 @@ export function readFile(fileName: string): Promise<bookItem[]> {
         let readBuffer = new ArrayBuffer(stas.size)
         let readLen = fs.readSync(file.fd, readBuffer, readOptions)
         let buf = buffer.from(readBuffer, 0, readLen)
-        console.info("the content of file: " + buf.toString());
         fs.closeSync(file.fd)
         if (buf.toString()) {
+          console.info(`${formatFilePath(fileName)}内容是：${buf.toString()}`)
           resolve(JSON.parse(buf.toString()) as bookItem[])
         } else {
+          console.info(`${formatFilePath(fileName)}内容是：空`)
           resolve([])
         }
       } else {
+        createFile(fileName)
+        console.info(`${formatFilePath(fileName)}内容是：空,文件不存在`)
         reject([])
       }
     })
   })
 }
 
+
+
+export function appendFile(fileName: string, obj: bookItem) {
+  fs.access(formatFilePath(fileName)).then((res) => {
+    // console.info("obj is:"+JSON.stringify(obj))
+    let arr: bookItem[] =[]
+    readFile(fileName).then((res)=>{
+      arr = arr.concat(res)
+      // console.info("追加读:"+JSON.stringify(res))
+      arr.unshift(obj)
+      // console.info("arr is:"+JSON.stringify(arr))
+      writeFile(fileName, arr)
+    })
+  })
+}
+
 export function writeFile(fileName: string, message: bookItem[]): Promise<string> {
   return new Promise<string>((resolve, reject) => {
-    fs.access(filesDir + fileName).then((res: boolean) => {
+    fs.access(formatFilePath(fileName)).then((res: boolean) => {
       if (res) {
-        let file = fs.openSync(filesDir + fileName, fs.OpenMode.WRITE_ONLY | fs.OpenMode.TRUNC);
-        // 写入一段内容至文件
-        let writeLen = fs.writeSync(file.fd, JSON.stringify(message));
-        console.info("The length of str is: " + writeLen);
+        let file = fs.openSync(formatFilePath(fileName), fs.OpenMode.WRITE_ONLY | fs.OpenMode.TRUNC);
+        fs.writeSync(file.fd, JSON.stringify(message));
+        console.info('has write:' + JSON.stringify(message))
         fs.closeSync(file.fd)
         resolve('记录成功')
       } else {
-        reject('记录失败，文件不存在')
+        let file = fs.openSync(formatFilePath(fileName), fs.OpenMode.WRITE_ONLY | fs.OpenMode.CREATE);
+        fs.writeSync(file.fd, JSON.stringify(message));
+        console.info('rej write'+JSON.stringify(message))
+        fs.closeSync(file.fd)
+        reject('记录成功,新建文件')
       }
     })
   })
 }
 
+
 export function deleteFile(fileName: string): Promise<string> {
   return new Promise<string>((resolve, reject) => {
-    fs.access(filesDir + fileName).then((res: boolean) => {
+    fs.access(formatFilePath(fileName)).then((res: boolean) => {
       if (res) {
-        fs.unlink(filesDir + fileName, (err: BusinessError) => {
+        fs.unlink(formatFilePath(fileName), (err: BusinessError) => {
           if (err) {
             reject("remove file failed with error message: " + err.message + ", error code: " + err.code)
           } else {

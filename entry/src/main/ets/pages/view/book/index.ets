@@ -1,46 +1,56 @@
-import { createFile, readFile, writeFile,deleteFile } from '../../../utils/file';
+
 import { bookItem } from '../../../utils/dataInterface';
-import { JSON } from '@kit.ArkTS';
-import { getCurrentDate } from '../../../utils/time'
+import { getNowDate, getNowTime, getLastMonthDates } from '../../../utils/time'
+
+@Extend(Text)
+function textStyle() {
+  .height(60)
+  .borderRadius(24)
+  .fontSize(16)
+  .fontWeight(500)
+  .textAlign(TextAlign.Center)
+}
 
 @Component
 export struct bookIndex {
-  @State message: bookItem[] = [{
-    date: '2024-02-15',
-    type: '医疗',
-    sum: 73.25,
-    description: 'string',
-  }, {
-    date: '2024-02-15',
-    type: '医疗',
-    sum: 74.35,
-    description: 'string',
-  }];
-  @State result: string = '';
+  @Consume allData: bookItem[]
+  @State searchDate: string = ''
+  @State searchError: string = ''
+  @Consume  todayData: bookItem[]
+  @Consume lastMonth: string[]
+
+
 
   build() {
-    Column() {
-      Button("点击")// 添加按钮的点击事件
-        .onClick(() => {
-          createFile(getCurrentDate() + '.json').then((res: string) => {
-            console.info(res)
-          }).catch((rej: string) => {
-            console.error(rej)
+    Navigation() {
+      Row({ space: 10 }) {
+        TextInput({ placeholder: '输入模糊日期匹配', text: this.searchDate })
+          .width("70%")
+          .height(40)
+          .backgroundColor($r('sys.color.comp_background_list_card'))
+          .onChange((val: string) => {
+            this.searchDate = val
           })
-          writeFile(getCurrentDate() + '.json', this.message).then((res: string) => {
-            console.info(res)
-          }).catch((rej: string) => {
-            console.error(rej)
+          .showError(this.searchError)
+          .onSubmit(() => {
           })
-          readFile(getCurrentDate()+'.json').then((res:bookItem[])=>{
-            console.info(res[0].type)
-          })
-          deleteFile(getCurrentDate()+'.json').then((res:string)=>{
-            console.info(res)
-          }).catch((rej:string)=>{
-            console.error(rej)
-          })
-        });
-    }.padding(40);
+        Button("搜索").width("20%").height(40).onClick(() => {
+        })
+      }.padding(10)
+
+      List({ space: 12 }) {
+        ForEach(this.allData, (item: bookItem) => {
+          ListItem() {
+            Column() {
+              Text(`时间:${item.timeMap}`).textStyle()
+              Text(`类型:${item.type}`).textStyle()
+              Text(`总计:${item.sum.toString()}`).textStyle()
+              Text(`描述:${item.description}`).textStyle()
+            }.padding(5).backgroundColor($r('sys.color.comp_background_list_card')).width('100%')
+          }
+        }, (item: bookItem) => item.timeMap)
+      }
+      .width("90%")
+    }.title("记账数据").titleMode(NavigationTitleMode.Mini).hideBackButton(true)
   }
 }

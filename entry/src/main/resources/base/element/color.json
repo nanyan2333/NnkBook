@@ -3,6 +3,19 @@
     {
       "name": "start_window_background",
       "value": "#FFFFFF"
+    },
+    {
+      "name": "Selected_icon",
+      "value": "#eab308"
+    },
+    {
+      "name": "icon_color",
+      "value": "#999999"
+    },
+    {
+      "name": "tabBar",
+      "value": "#eeeeee"
     }
+
   ]
 }

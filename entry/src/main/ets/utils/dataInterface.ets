@@ -1,6 +1,6 @@
 export interface bookItem{
-  date:string
+  timeMap:string
   type:string
-  sum:number
+  sum:string
   description:string
 }

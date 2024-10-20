@@ -11,6 +11,12 @@
     {
       "name": "EntryAbility_label",
       "value": "label"
+    },
+    {
+      "name": "file_specification",
+      "value": ".json"
     }
+
+
   ]
 }
