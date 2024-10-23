@@ -1,58 +1,91 @@
 import { bookItem } from '../../../utils/dataInterface'
 import { appendFile } from '../../../utils/file'
 import { getNowDate, getNowTime } from '../../../utils/time'
-import { JSON } from '@kit.ArkTS'
+import { tagMenu } from './tagMenu'
+import {showDialog} from '../../../utils/confirmDialog'
+
+@Extend(Text)
+function titleStyle() {
+  .fontSize(17).fontWeight(400)
+}
 
 @Component
 export struct addIndex {
-  @State form: bookItem = {
+  @Provide form: bookItem = {
     timeMap: getNowTime(),
     type: '',
+    tag: 0,
     sum: '',
     description: ''
   }
+  @Provide buttonText:string = '请选择标签'
   @Consume todayData: bookItem[]
-  private fileName: string = getNowDate() + $r('app.string.file_specification')
 
-  aboutToAppear(): void {
-    // console.info("add comp has appear")
-  }
 
   build() {
-    Column({ space: 16 }) {
+    Column({ space: 25 }) {
       Row({ space: 10 }) {
-        Text('类型')
-        TextInput({ placeholder: '类型', text: this.form.type }).onChange((val: string) => {
-          this.form.type = val
-        })
-      }
+        Text('类型').width('12%').titleStyle()
+        Column() {
+          Radio({ value: '支出', group: 'typeGroup' }).checked(this.form.type === '支出').onChange(() => {
+            this.form.type = '支出'
+          })
+          Text('支出')
+        }
+
+        Column() {
+          Radio({ value: '收入', group: 'typeGroup' }).checked(this.form.type === '收入').onChange(() => {
+            this.form.type = '收入'
+          })
+          Text('收入')
+        }
+      }.justifyContent(FlexAlign.Start)
 
       Row({ space: 10 }) {
-        Text('数目')
+        Text('金额').width('12%').titleStyle()
         TextInput({ placeholder: '数目', text: this.form.sum }).onChange((val: string) => {
           this.form.sum = val
-        })
-      }
+        }).width('80%')
+      }.justifyContent(FlexAlign.Start)
 
       Row({ space: 10 }) {
-        Text('描述')
+        Text('标签').width('12%').titleStyle()
+        tagMenu()
+      }.justifyContent(FlexAlign.Start)
+
+      Row({ space: 10 }) {
+        Text('描述').width('12%').titleStyle()
         TextInput({ placeholder: '描述', text: this.form.description }).onChange((val: string) => {
           this.form.description = val
-        })
-      }
+        }).width('80%')
+      }.justifyContent(FlexAlign.Start).margin({ bottom: 30 })
 
       Flex({ direction: FlexDirection.RowReverse }) {
-        Button("提交").height(40).width('30%').padding(10).onClick(() => {
-          const newForm: bookItem = {
-            timeMap: getNowTime(),
-            type: this.form.type,
-            sum: this.form.sum,
-            description: this.form.description
-          };
-          this.todayData.push(newForm)
-          appendFile(getNowDate(), newForm)
-        })
+        Button("提交")
+          .height(40)
+          .width('30%')
+          .padding(10)
+          .onClick(() => {
+            showDialog('添加记录','确认提交数据',()=>{
+              const newForm: bookItem = {
+                timeMap: getNowTime(),
+                type: this.form.type,
+                tag: this.form.tag,
+                sum: this.form.sum,
+                description: this.form.description
+              };
+              this.todayData.push(newForm)
+              appendFile(getNowDate(), newForm)
+              this.form.sum = ''
+              this.form.description = ''
+              this.form.tag = 0
+              this.buttonText = '请选择标签'
+              this.form.type = ''
+            })
+          })
+          .margin({ right: 30 })
       }
-    }
+    }.alignItems(HorizontalAlign.Start).margin({ left: 20, right: 20 })
+
   }
 }

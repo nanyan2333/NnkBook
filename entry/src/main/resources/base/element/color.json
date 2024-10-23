@@ -15,6 +15,10 @@
     {
       "name": "tabBar",
       "value": "#eeeeee"
+    },
+    {
+      "name": "text_secondary",
+      "value": "#666666"
     }
 
   ]

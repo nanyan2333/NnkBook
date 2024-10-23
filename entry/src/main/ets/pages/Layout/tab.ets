@@ -13,11 +13,23 @@ export struct TabsPage {
   @Provide @Watch('onPushDataChange') todayData: bookItem[] = []
   @Provide allData: bookItem[] = []
   @Provide lastMonth: string[] = getLastMonthDates();
+  @Provide dailyCount: number = 0
+  @Provide allIncome: number = 0
+  @Provide allOutcome: number = 0
   private tabsController: TabsController = new TabsController()
 
   onPushDataChange() {
-    let last: bookItem = this.todayData[this.todayData.length - 1]
-    this.allData.unshift(last)
+    if (this.todayData.length) {
+      let last: bookItem = this.todayData[this.todayData.length - 1]
+      this.dailyCount += 1
+      let sum: number = parseFloat(last.sum)
+      if (last.type === '收入') {
+        this.allIncome += sum
+      } else {
+        this.allOutcome -= sum
+      }
+      this.allData.unshift(last)
+    }
     // console.info('change on all data:' + JSON.stringify(this.allData))
   }
 
@@ -25,9 +37,18 @@ export struct TabsPage {
     for (let date of this.lastMonth) {
       readFile(date).then((res) => {
         this.allData = [...res, ...this.allData]
+        for (let item of res) {
+          this.dailyCount += 1
+          let sum: number = parseFloat(item.sum)
+          if (item.type === '支出') {
+            this.allOutcome -= sum
+          } else {
+            this.allIncome += sum
+          }
+        }
       })
     }
-    console.info('init'+JSON.stringify(this.allData))
+    // console.info('init'+JSON.stringify(this.allData))
     // console.info('init:' + JSON.stringify(this.allData))
   }
 
@@ -70,7 +91,7 @@ export struct TabsPage {
         }.tabBar(this.TabBuilder('设置', 2, $rawfile('setting.svg'), $rawfile('setting_select.svg')))
       }
       .scrollable(false) //去掉左右滑动的效果
-      .animationDuration(0) //去掉左右滑动的动画
+      .animationDuration(1) //去掉左右滑动的动画
     }
     .backgroundColor($r("app.color.tabBar"))
     .width('100%')
