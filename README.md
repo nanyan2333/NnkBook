@@ -1,11 +1,27 @@
-## 项目背景  
+# 1. 项目背景  
 本项目是厦门大学2022级软件工程使用操作系统大作业，基于Open Harmony的arkts声明式组件开发和arkUi编写一个原生鸿蒙App，提交材料包括源码，文档和演示视频。  
-## 项目简介  
+
+
+# 2. 项目简介  
 此项目是一个简单的记账本，包含基础的记账数据本地持久化，查询，筛选，展示，统计和清除功能。遵循松耦合的设计原则，具有良好的可拓展性。  
 项目地址: https://github.com/nanyan2333/NnkBook  
 
-## 结构说明  
-源码目录src/main
+# 3. 开发环境  
+- Windows 11  
+  - DevEco Studio Windows V5.0.3.900
+  - Git
+- DevEco Studio自带的模拟手机设备  
+# 4. 需求说明  
+用户能够通过软件统计最近一个月(30天)的收入支出情况，列出每一次记账的数额，详细时间，类型（收入还是支出），标签，并且能够查看到一个最近30天的支出总额，收入总额，记账次数  
+功能如下： 
+
+- 查询30天内的记账记录，列出明细
+- 查询特定日期的记账记录
+- 对查询结果的收入总额支出总额进行统计
+- 新增记账记录并本地持久化
+- 清空本地记录
+# 5. 项目结构说明  
+核心源码目录在src/main
 ```  
 │  module.json5
 │
@@ -20,19 +36,19 @@
 │  │  │  Index.ets //程序入口
 │  │  │
 │  │  ├─Layout
-│  │  │      tab.ets // 导航栏布局
+│  │  │      tab.ets // 导航栏布局，挂载到程序入口
 │  │  │
-│  │  └─view
+│  │  └─view // 视图层，其中的index挂载到Layout布局中，其他文件各自挂载到各自的index文件下
 │  │      ├─add
 │  │      │      index.ets // 新增记账入口
 │  │      │      tagMenu.ets
 │  │      │
 │  │      ├─book
-│  │      │      index.ets
+│  │      │      index.ets // 查询记账入口
 │  │      │      listItemBuilder.ets
 │  │      │
 │  │      └─setting
-│  │              index.ets
+│  │              index.ets // 清除数据入口
 │  │
 │  └─utils
 │          confirmDialog.ets // 通用确认对话框组件
@@ -103,8 +119,13 @@
 
 ---  
 
+# 6. 可拓展方向以及不足
+- Ui设计较为简陋，后续可以往Ui美化方向进行优化
+- 已对标签枚举，后续可以通过华为第三方仓库的echarts进行对不同标签不同类型的数据可视化展示
+- 数据耦合度较高，查询的数据全部挂载在Layout层进行Provide
 
-## 项目演示  
+
+# 7. 项目演示  
 - 应用图标  
 ![Alt text](https://github.com/nanyan2333/image/blob/main/icon.png?raw=true) 
 - 主界面  
