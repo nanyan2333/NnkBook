@@ -33,6 +33,51 @@ export struct bookIndex {
     return num == 0 ? num.toString() : `+${num.toString()}`
   }
 
+  search = () => {
+    // TODO:模糊匹配
+    readFile(this.searchDate).then((res) => {
+      this.allData = [...res]
+      this.allIncome = 0
+      this.allOutcome = 0
+      for (let item of res) {
+        let sum: number = parseFloat(item.sum)
+        if (item.type === '支出') {
+          this.allOutcome -= sum
+        } else {
+          this.allIncome += sum
+        }
+      }
+    }).catch((rej: bookItem[]) => {
+      this.allData = rej
+      this.allIncome = 0
+      this.allOutcome = 0
+    })
+  }
+
+  reset = () => {
+    this.searchDate = ''
+    this.allData = []
+    this.allIncome = 0
+    this.allOutcome = 0
+    for (let date of this.lastMonth) {
+      readFile(date).then((res) => {
+        this.allData = [...res, ...this.allData]
+        for (let item of res) {
+          let sum: number = parseFloat(item.sum)
+          if (item.type === '支出') {
+            this.allOutcome -= sum
+          } else {
+            this.allIncome += sum
+          }
+        }
+      })
+    }
+    promptAction.showToast({
+      message: '重置成功',
+      bottom: 300
+    })
+  }
+
   build() {
     Navigation() {
       Column() {
@@ -70,48 +115,10 @@ export struct bookIndex {
             .onSubmit(() => {
             })
           Button("搜索").width("20%").height(40).onClick(() => {
-            // TODO:模糊匹配
-            readFile(this.searchDate).then((res) => {
-              this.allData = [...res]
-              this.allIncome = 0
-              this.allOutcome = 0
-              for (let item of res) {
-                let sum: number = parseFloat(item.sum)
-                if (item.type === '支出') {
-                  this.allOutcome -= sum
-                } else {
-                  this.allIncome += sum
-                }
-              }
-            }).catch((rej: bookItem[]) => {
-              this.allData = rej
-              this.allIncome = 0
-              this.allOutcome = 0
-            })
-
+            this.search()
           })
           Button('重置').width("20%").height(40).onClick(() => {
-            this.searchDate = ''
-            this.allData = []
-            this.allIncome = 0
-            this.allOutcome = 0
-            for (let date of this.lastMonth) {
-              readFile(date).then((res) => {
-                this.allData = [...res, ...this.allData]
-                for (let item of res) {
-                  let sum: number = parseFloat(item.sum)
-                  if (item.type === '支出') {
-                    this.allOutcome -= sum
-                  } else {
-                    this.allIncome += sum
-                  }
-                }
-              })
-            }
-            promptAction.showToast({
-              message: '重置成功',
-              bottom: 300
-            })
+            this.reset()
           })
         }
         .margin({

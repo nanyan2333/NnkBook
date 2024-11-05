@@ -2,7 +2,8 @@ import { bookItem } from '../../../utils/dataInterface'
 import { appendFile } from '../../../utils/file'
 import { getNowDate, getNowTime } from '../../../utils/time'
 import { tagMenu } from './tagMenu'
-import {showDialog} from '../../../utils/confirmDialog'
+import { showDialog } from '../../../utils/confirmDialog'
+import { promptAction } from '@kit.ArkUI'
 
 @Extend(Text)
 function titleStyle() {
@@ -14,13 +15,46 @@ export struct addIndex {
   @Provide form: bookItem = {
     timeMap: getNowTime(),
     type: '',
-    tag: 0,
+    tag: -1,
     sum: '',
     description: ''
   }
-  @Provide buttonText:string = '请选择标签'
+  @Provide buttonText: string = '请选择标签'
   @Consume todayData: bookItem[]
-
+  numRegExp: RegExp = new RegExp('^\d+(\.\d{1,2})?$')
+  onSubmit = () => {
+    if (this.form.type === '' || !this.form.type) {
+      showDialog('表单验证错误', '请选择类型', () => {
+      })
+    } else if (!this.numRegExp.test(this.form.sum)) {
+      showDialog('表单验证错误', '金额格式错误', () => {
+      })
+    } else if (this.form.tag == -1) {
+      showDialog('表单验证错误', '请选择标签', () => {
+      })
+    } else {
+      showDialog('添加记录', '确认提交数据', () => {
+        const newForm: bookItem = {
+          timeMap: getNowTime(),
+          type: this.form.type,
+          tag: this.form.tag,
+          sum: this.form.sum,
+          description: this.form.description
+        };
+        this.todayData.push(newForm)
+        appendFile(getNowDate(), newForm)
+        this.form.sum = ''
+        this.form.description = ''
+        this.form.tag = 0
+        this.buttonText = '请选择标签'
+        this.form.type = ''
+        promptAction.showToast({
+          message: '提交成功',
+          bottom: 300
+        })
+      })
+    }
+  }
 
   build() {
     Column({ space: 25 }) {
@@ -66,22 +100,7 @@ export struct addIndex {
           .width('30%')
           .padding(10)
           .onClick(() => {
-            showDialog('添加记录','确认提交数据',()=>{
-              const newForm: bookItem = {
-                timeMap: getNowTime(),
-                type: this.form.type,
-                tag: this.form.tag,
-                sum: this.form.sum,
-                description: this.form.description
-              };
-              this.todayData.push(newForm)
-              appendFile(getNowDate(), newForm)
-              this.form.sum = ''
-              this.form.description = ''
-              this.form.tag = 0
-              this.buttonText = '请选择标签'
-              this.form.type = ''
-            })
+            this.onSubmit()
           })
           .margin({ right: 30 })
       }

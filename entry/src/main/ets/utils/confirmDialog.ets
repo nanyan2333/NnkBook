@@ -5,11 +5,14 @@ export function showDialog(_title: string, _message: string, _callback_confirm: 
     message: _message,
     primaryButton: {
       value: '取消',
-      action: ()=>{}
+      action: () => {
+      }
     },
     secondaryButton: {
       value: '确认',
-      action: ()=>{_callback_confirm()}
+      action: () => {
+        _callback_confirm()
+      }
     }
   })
 }

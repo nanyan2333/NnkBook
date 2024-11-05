@@ -64,7 +64,7 @@ export function readFile(fileName: string): Promise<bookItem[]> {
 }
 
 
-export function appendFile(fileName: string, obj: bookItem) {
+export function appendFile(fileName: string, obj: bookItem){
   fs.access(formatFilePath(fileName)).then((res) => {
     // console.info("obj is:"+JSON.stringify(obj))
     let arr: bookItem[] = []

@@ -6,6 +6,8 @@ export interface bookItem {
   description: string
 }
 
+export const tagSum = 19
+
 export enum TagSelect {
   medical, // 医疗
   food, // 食物
@@ -68,7 +70,7 @@ export function tagNumMapStr(num: number): string {
       return "工资"
     case TagSelect.other:
       return "其他"
-    default :
+    default:
       return '溢出'
   }
 }
