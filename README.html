@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>&#x9879;&#x76ee;&#x80cc;&#x666f;</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h2 id="项目背景">项目背景</h2>
+<p>本项目是厦门大学2022级软件工程使用操作系统大作业，基于Open Harmony的arkts声明式组件开发和arkUi编写一个原生鸿蒙App，提交材料包括源码，文档和演示视频。</p>
+<h2 id="项目简介">项目简介</h2>
+<p>此项目是一个简单的记账本，包含基础的记账数据本地持久化，查询，筛选，展示，统计和清除功能。遵循松耦合的设计原则，具有良好的可拓展性。<br>
+项目地址: <a href="https://github.com/nanyan2333/NnkBook">https://github.com/nanyan2333/NnkBook</a></p>
+<h2 id="结构说明">结构说明</h2>
+<p>源码目录src/main</p>
+<pre><code>│  module.json5
+│
+├─ets
+│  ├─entryability
+│  │      EntryAbility.ets
+│  │
+│  ├─entrybackupability
+│  │      EntryBackupAbility.ets
+│  │
+│  ├─pages
+│  │  │  Index.ets //程序入口
+│  │  │
+│  │  ├─Layout
+│  │  │      tab.ets // 导航栏布局
+│  │  │
+│  │  └─view
+│  │      ├─add
+│  │      │      index.ets // 新增记账入口
+│  │      │      tagMenu.ets
+│  │      │
+│  │      ├─book
+│  │      │      index.ets
+│  │      │      listItemBuilder.ets
+│  │      │
+│  │      └─setting
+│  │              index.ets
+│  │
+│  └─utils
+│          confirmDialog.ets // 通用确认对话框组件
+│          dataInterface.ets // 通用数据接口和枚举映射
+│          file.ets // 通用文件读写
+│          time.ets // 时间字符串操作
+│
+└─resources
+    ├─base
+    │  ├─element
+    │  │      color.json
+    │  │      string.json
+    │  │
+    │  ├─media
+    │  │      background.png
+    │  │      foreground.png
+    │  │      layered_image.json
+    │  │      startIcon.png
+    │  │      TwemojiClownFace.png
+    │  │
+    │  └─profile
+    │          backup_config.json
+    │          main_pages.json
+    │
+    ├─en_US
+    │  └─element
+    │          string.json
+    │
+    ├─rawfile
+    │      add.svg
+    │      add_select.svg
+    │      book.svg
+    │      book_select.svg
+    │      clear.svg
+    │      description.svg
+    │      recordPoint.svg
+    │      setting.svg
+    │      setting_select.svg
+    │      sum.svg
+    │      tag.svg
+    │      time.svg
+    │
+    └─zh_CN
+        └─element
+                string.json
+</code></pre>
+<ul>
+<li>
+<p><code>src/main/ets</code>: 包含项目的核心代码。</p>
+<ul>
+<li><code>entryability</code> 和 <code>entrybackupability</code>: 各自包含不同功能的 <code>EntryAbility.ets</code> 文件。</li>
+<li><code>pages</code>: 页面结构，包含多个子页面和布局。
+<ul>
+<li><code>Layout</code>: 包含布局文件， <code>tab.ets</code>构建了底部导航栏，映射视图层各个视图的index文件，包含一个渲染前的钩子和所有的组件通信全局变量（@Provide注解）和一个导航栏控制器构建函数。</li>
+<li><code>view</code>: 包含不同视图的文件，选择性的消费父组件提供的变量渲染对应视图。
+<ul>
+<li><code>add</code>: 是新增记账表单组件，包含 <code>index.ets</code> 和 <code>tagMenu.ets</code> 文件，其中index是入口，tagMenu是选择表单的组件。</li>
+<li><code>book</code>: 是主界面组件包含 <code>index.ets</code> 和 <code>listItemBuilder.ets</code> 文件，包含一个搜索栏，三个文本组件和一个表单组件，listItemBuilder是列表项的Builder函数。</li>
+<li><code>setting</code>: 包含设置页面的 <code>index.ets</code> 文件，目前只有清空应用数据功能。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>utils</code>: 包含通用工具文件，如 <code>confirmDialog.ets</code>、<code>dataInterface.ets</code>、<code>file.ets</code> 和 <code>time.ets</code>。
+<ul>
+<li><code>confirmDialog.ets</code>: 是确认弹窗组件函数</li>
+<li><code>dataInterface.ets</code>: 是通用数据接口bookItem和枚举映射函数的模块导出</li>
+<li><code>file.ets</code>: 操作json文件的封装，包含初始化文件路径，删除扩展名，创建文件，读文件，重写文件，追加文件（往字典里添加一项），删除文件，清空内存几个函数。</li>
+<li><code>time.ets</code>: 获取当前日期和当前时间并初始化格式的函数</li>
+</ul>
+</li>
+<li><code>index.ets</code>: app根组件入口文件</li>
+</ul>
+</li>
+<li>
+<p><code>resources</code>: 项目资源文件。</p>
+<ul>
+<li><code>base/element</code>: 包含颜色和字符串定义的 JSON 文件。</li>
+<li><code>base/media</code>: 包含图片和图标资源文件。</li>
+<li><code>profile</code>, <code>en_US</code>, <code>rawfile</code>, <code>zh_CN</code>: 各种配置和语言文件夹，其中项目图标都在rawfile中引用。</li>
+</ul>
+</li>
+<li>
+<p><code>module.json5</code>: 项目的模块配置文件。</p>
+</li>
+</ul>
+<hr>
+<h2 id="项目演示">项目演示</h2>
+<ul>
+<li>应用图标<br>
+<img src="https://github.com/nanyan2333/image/blob/main/icon.png?raw=true" alt="Alt text"></li>
+<li>主界面<br>
+<img src="https://github.com/nanyan2333/image/blob/main/main.png?raw=true" alt="Alt text">
+<img src="https://github.com/nanyan2333/image/blob/main/search.png?raw=true" alt="Alt text">
+<img src="https://github.com/nanyan2333/image/blob/main/reset.png?raw=true" alt="Alt text"></li>
+<li>提交新的记录<br>
+<img src="https://github.com/nanyan2333/image/blob/main/new1.png?raw=true" alt="Alt text">
+<img src="https://github.com/nanyan2333/image/blob/main/new2.png?raw=true" alt="Alt text">
+<img src="https://github.com/nanyan2333/image/blob/main/new3.png?raw=true" alt="Alt text"></li>
+<li>设置<br>
+<img src="https://github.com/nanyan2333/image/blob/main/setting.png?raw=true" alt="Alt text"></li>
+</ul>
+
+            
+            
+        </body>
+        </html>

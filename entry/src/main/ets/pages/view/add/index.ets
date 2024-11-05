@@ -21,12 +21,13 @@ export struct addIndex {
   }
   @Provide buttonText: string = '请选择标签'
   @Consume todayData: bookItem[]
-  numRegExp: RegExp = new RegExp('^\d+(\.\d{1,2})?$')
+  numRegExp: RegExp = /^\d+(\.\d{1,2})?$/
   onSubmit = () => {
     if (this.form.type === '' || !this.form.type) {
       showDialog('表单验证错误', '请选择类型', () => {
       })
     } else if (!this.numRegExp.test(this.form.sum)) {
+      console.log(this.form.sum.length.toString())
       showDialog('表单验证错误', '金额格式错误', () => {
       })
     } else if (this.form.tag == -1) {
