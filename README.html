@@ -2,7 +2,7 @@
         <html>
         <head>
             <meta charset="UTF-8">
-            <title>&#x9879;&#x76ee;&#x80cc;&#x666f;</title>
+            <title>1&period; &#x9879;&#x76ee;&#x80cc;&#x666f;</title>
             <style>
 /* From extension vscode.github */
 /*---------------------------------------------------------------------------------------------
@@ -138,13 +138,33 @@
         
         </head>
         <body class="vscode-body vscode-light">
-            <h2 id="项目背景">项目背景</h2>
+            <h1 id="1-项目背景">1. 项目背景</h1>
 <p>本项目是厦门大学2022级软件工程使用操作系统大作业，基于Open Harmony的arkts声明式组件开发和arkUi编写一个原生鸿蒙App，提交材料包括源码，文档和演示视频。</p>
-<h2 id="项目简介">项目简介</h2>
+<h1 id="2-项目简介">2. 项目简介</h1>
 <p>此项目是一个简单的记账本，包含基础的记账数据本地持久化，查询，筛选，展示，统计和清除功能。遵循松耦合的设计原则，具有良好的可拓展性。<br>
 项目地址: <a href="https://github.com/nanyan2333/NnkBook">https://github.com/nanyan2333/NnkBook</a></p>
-<h2 id="结构说明">结构说明</h2>
-<p>源码目录src/main</p>
+<h1 id="3-开发环境">3. 开发环境</h1>
+<ul>
+<li>Windows 11
+<ul>
+<li>DevEco Studio Windows V5.0.3.900</li>
+<li>Git</li>
+</ul>
+</li>
+<li>DevEco Studio自带的模拟手机设备</li>
+</ul>
+<h1 id="4-需求说明">4. 需求说明</h1>
+<p>用户能够通过软件统计最近一个月(30天)的收入支出情况，列出每一次记账的数额，详细时间，类型（收入还是支出），标签，并且能够查看到一个最近30天的支出总额，收入总额，记账次数<br>
+功能如下：</p>
+<ul>
+<li>查询30天内的记账记录，列出明细</li>
+<li>查询特定日期的记账记录</li>
+<li>对查询结果的收入总额支出总额进行统计</li>
+<li>新增记账记录并本地持久化</li>
+<li>清空本地记录</li>
+</ul>
+<h1 id="5-项目结构说明">5. 项目结构说明</h1>
+<p>核心源码目录在src/main</p>
 <pre><code>│  module.json5
 │
 ├─ets
@@ -158,19 +178,19 @@
 │  │  │  Index.ets //程序入口
 │  │  │
 │  │  ├─Layout
-│  │  │      tab.ets // 导航栏布局
+│  │  │      tab.ets // 导航栏布局，挂载到程序入口
 │  │  │
-│  │  └─view
+│  │  └─view // 视图层，其中的index挂载到Layout布局中，其他文件各自挂载到各自的index文件下
 │  │      ├─add
 │  │      │      index.ets // 新增记账入口
 │  │      │      tagMenu.ets
 │  │      │
 │  │      ├─book
-│  │      │      index.ets
+│  │      │      index.ets // 查询记账入口
 │  │      │      listItemBuilder.ets
 │  │      │
 │  │      └─setting
-│  │              index.ets
+│  │              index.ets // 清除数据入口
 │  │
 │  └─utils
 │          confirmDialog.ets // 通用确认对话框组件
@@ -258,7 +278,13 @@
 </li>
 </ul>
 <hr>
-<h2 id="项目演示">项目演示</h2>
+<h1 id="6-可拓展方向以及不足">6. 可拓展方向以及不足</h1>
+<ul>
+<li>Ui设计较为简陋，后续可以往Ui美化方向进行优化</li>
+<li>已对标签枚举，后续可以通过华为第三方仓库的echarts进行对不同标签不同类型的数据可视化展示</li>
+<li>数据耦合度较高，查询的数据全部挂载在Layout层进行Provide</li>
+</ul>
+<h1 id="7-项目演示">7. 项目演示</h1>
 <ul>
 <li>应用图标<br>
 <img src="https://github.com/nanyan2333/image/blob/main/icon.png?raw=true" alt="Alt text"></li>
